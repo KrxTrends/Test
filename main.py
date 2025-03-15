@@ -1,4 +1,5 @@
 from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -17,8 +18,9 @@ def scrape_threads(df_trends):
     chrome_options.add_argument("--no-sandbox")  # Improves performance on some systems
     chrome_options.add_argument("--disable-dev-shm-usage")  # Prevents crashes on limited memory
     
-    service = Service('/opt/render/project/.render/chrome/chromedriver')
-    driver = webdriver.Chrome(service=service, options=chrome_options)
+    # service = Service('/opt/render/project/.render/chrome/chromedriver')
+    # driver = webdriver.Chrome(service=service, options=chrome_options)
+    driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
     # driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
     results = []

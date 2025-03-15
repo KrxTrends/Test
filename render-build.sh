@@ -1,28 +1,17 @@
 #!/usr/bin/env bash
-
-# Exit on errors
+# exit on error
 set -o errexit
 
-# Create a directory for Chrome installation
-mkdir -p /opt/render/project/.render/chrome
+STORAGE_DIR=/opt/render/project/.render
 
-# Download and install Chrome
-echo "Downloading and Installing Chrome from https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-curl -SL https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -o /tmp/chrome.deb
-dpkg -x /tmp/chrome.deb /opt/render/project/.render/chrome
-
-# Download and install ChromeDriver
-CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE")
-echo "ChromeDriver Version: $CHROMEDRIVER_VERSION"
-# CHROME_VERSION=$(/opt/render/project/.render/chrome/opt/google/chrome/google-chrome --version | awk '{print $3}' | cut -d'.' -f1,2)
-# echo "Chrome Version: $CHROME_VERSION"
-
-echo "Downloading and installing ChromeDriver version: $CHROMEDRIVER_VERSION"
-curl -SL "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip" -o /tmp/chromedriver.zip
-# CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
-# echo "Downloading and installing ChromeDriver version: $CHROMEDRIVER_VERSION"
-# curl -SL "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip" -o /tmp/chromedriver.zip
-unzip /tmp/chromedriver.zip -d /opt/render/project/.render/chrome
-
-# Make ChromeDriver executable
-chmod +x /opt/render/project/.render/chrome/chromedriver
+if [[ ! -d $STORAGE_DIR/chrome ]]; then
+  echo "...Downloading Chrome"
+  mkdir -p $STORAGE_DIR/chrome
+  cd $STORAGE_DIR/chrome
+  wget -P ./ https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  dpkg -x ./google-chrome-stable_current_amd64.deb $STORAGE_DIR/chrome
+  rm ./google-chrome-stable_current_amd64.deb
+  cd $HOME/project/src # Make sure we return to where we were
+else
+  echo "...Using Chrome from cache"
+fi
