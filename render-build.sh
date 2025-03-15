@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# Exit on errors
+set -o errexit
+
+# Create a directory for Chrome installation
+mkdir -p /opt/render/project/.render/chrome
+
+# Download and install Chrome
+curl -SL https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -o /tmp/chrome.deb
+dpkg -x /tmp/chrome.deb /opt/render/project/.render/chrome
+
+# Download and install ChromeDriver
+CHROME_VERSION=$(/opt/render/project/.render/chrome/opt/google/chrome/google-chrome --version | awk '{print $3}')
+CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+# CHROME_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE)
+curl -SL "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip" -o /tmp/chromedriver.zip
+unzip /tmp/chromedriver.zip -d /opt/render/project/.render/chrome
+
+# Make ChromeDriver executable
+chmod +x /opt/render/project/.render/chrome/chromedriver

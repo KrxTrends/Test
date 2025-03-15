@@ -10,7 +10,7 @@ import urllib.parse
 
 def scrape_threads(df_trends):
     chrome_options = Options()
-    chrome_options.binary_location = '/opt/render/project/.render/chrome/opt/google/chrome/usr/bin/google-chrome'
+    chrome_options.binary_location = '/opt/render/project/.render/chrome/opt/google/chrome/google-chrome'
     # options = webdriver.ChromeOptions()
     chrome_options.add_argument("--headless")  # Runs without GUI
     chrome_options.add_argument("--disable-gpu")  # Prevents graphics processing
